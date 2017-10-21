@@ -1,0 +1,5 @@
+demo/demo
+*.o
+objs/
+tmp/
+*.a
