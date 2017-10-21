@@ -2,7 +2,7 @@ INCLUDES=-Iinclude/
 CFLAGS=$(INCLUDES) -m64 -Wall -Werror -pedantic -masm=intel
 
 OBJC=objs/dummy.c.o objs/bigint_mm.c.o objs/bigint_sa.c.o objs/bigint_cmp.c.o
-OBJC+=objs/bigint_serialize.c.o objs/bigint_bo.c.o
+OBJC+=objs/bigint_sd.c.o objs/bigint_bo.c.o
 OBJS=
 OUTPUT=libsammy.a
 

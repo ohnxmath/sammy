@@ -17,8 +17,8 @@ bigint *bigint_add(bigint *a, const bigint *b) {
     }
 
     if ((a->len == b->len) && /* case 2: a = b, but addition overflows */
-      (bigint_libutil_value(a)[a->len-1] & msb) &&
-      (bigint_libutil_value(t)[b->len-1] & msb)) {
+      (bigint_lu_v(a)[a->len-1] & msb) &&
+      (bigint_lu_v(t)[b->len-1] & msb)) {
         a = bigint_mm_resize(a, a->len + 1);
     }
 
@@ -73,7 +73,7 @@ bigint *bigint_add(bigint *a, const bigint *b) {
         /* all done. */
         "bigint_add_done:\n\t"
         : 
-        : "r"(bigint_libutil_value(a)),"r"(bigint_libutil_value(b)),"r"(b->len)
+        : "r"(bigint_lu_v(a)),"r"(bigint_lu_v(b)),"r"(b->len)
         : "ah", "r13", "r14", "r15", "cc"
     );
 
@@ -138,14 +138,14 @@ bigint *bigint_sub(bigint *a, const bigint *b) {
 
         "bigint_sub_alldone:\n\t"
         : "=r"(x)
-        : "r"(bigint_libutil_value(a)),"r"(bigint_libutil_value(b)),
+        : "r"(bigint_lu_v(a)),"r"(bigint_lu_v(b)),
           "r"(b->len)
         : "ah", "r13", "r14", "r15", "cc"
     );
 
     /* still need to borrow 1 more */
     if (x == 1) {
-        bigint_libutil_value(a)[b->len] -= 1;
+        bigint_lu_v(a)[b->len] -= 1;
     }
 
     return bigint_mm_optimize(a);

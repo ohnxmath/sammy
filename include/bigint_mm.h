@@ -15,7 +15,7 @@
 bigint *bigint_new(bigint_unit x);
 
 /* duplicate a big integer */
-bigint *bigint_dup(bigint *a);
+bigint *bigint_dup(const bigint *a);
 
 /* free allocated memory */
 void bigint_free(bigint *a);

@@ -28,13 +28,13 @@
 
 /* =========================[ namespace bigint_mm ]========================== */
 
-/* Allocate memory */
+/* Allocate memory - returns NULL on failure */
 #define bigint_mm_malloc(n)     malloc(n)
 
-/* Reallocate memory */
+/* Reallocate memory - returns NULL on failure */
 #define bigint_mm_realloc(x, n) realloc(x, n)
 
-/* Free memory */
+/* Free memory - return value is ignored */
 #define bigint_mm_free(x)       free(x)
 
 #endif /* __SAMMY_CUSTOMIZATION_H_INC */

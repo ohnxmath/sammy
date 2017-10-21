@@ -13,8 +13,8 @@ uint8_t bigint_cmp(const bigint *a, const bigint *b) {
      * by forcing i > 0 before i--
      */
     for (i = a->len; i > 0; i--)
-        if (bigint_libutil_value(a)[i-1] != bigint_libutil_value(b)[i-1])
-            return bigint_libutil_value(a)[i-1] < bigint_libutil_value(b)[i-1] ?
+        if (bigint_lu_v(a)[i-1] != bigint_lu_v(b)[i-1])
+            return bigint_lu_v(a)[i-1] < bigint_lu_v(b)[i-1] ?
                 BIGINT_CMP_LT : BIGINT_CMP_GT;
 
     /* everything is equal if we fall through to here */

@@ -1,6 +1,6 @@
 #include "bigint_serialize.h"
 
-char *bigint_rep_stringhex(const bigint *a) {
+char *bigint_tohexstr(const bigint *a) {
     char *hex, *nbr;
     int j;
 
@@ -15,7 +15,7 @@ char *bigint_rep_stringhex(const bigint *a) {
     hex[0] = '0';
     hex[1] = 'x';
 
-    nbr = (char *)bigint_libutil_value(a);
+    nbr = (char *)bigint_lu_v(a);
 
     /* loop through all digits */
     for (j = a->len*8; j > 0; j--) {

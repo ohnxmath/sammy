@@ -22,6 +22,9 @@ typedef uint16_t bigint_len_unit;
 
 /* main bigint structure */
 typedef struct bigint {
+    /* length of allocated memory */
+    bigint_len_unit aml;
+    /* length of used memory */
     bigint_len_unit len;
     /* ... array of uint64_t's (little-endian) goes here ... */
 } bigint;

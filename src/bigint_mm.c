@@ -3,24 +3,27 @@
 /* ===========================[ namespace bigint ]=========================== */
 
 bigint *bigint_new(bigint_unit x) {
-    /* allocate an initial block of 1 unit */
-    bigint *a = bigint_mm_malloc(sizeof(bigint) + sizeof(bigint_unit));
+    /* allocate an initial block of 2 units, but only use 1 */
+    bigint *a = bigint_mm_malloc(sizeof(bigint) + sizeof(bigint_unit) * 2);
     /* ensure no memory issues */
     if (!a) bigint_mm_err();
-    /* set initial length */
+
+    /* set initial length + allocated length */
+    a->aml = 2;
     a->len = 1;
-    bigint_libutil_value(a)[0] = x;
+    bigint_lu_v(a)[0] = x;
 
     return a;
 }
 
-bigint *bigint_dup(bigint *a) {
+bigint *bigint_dup(const bigint *a) {
     /* allocate required memory */
-    bigint *b = bigint_mm_malloc(sizeof(bigint) + sizeof(bigint_unit) * a->len);
+    bigint *b = bigint_mm_malloc(sizeof(bigint) + sizeof(bigint_unit) * a->aml);
     /* ensure no memory issues */
     if (!b) bigint_mm_err();
+
     /* copy over data */
-    memcpy(b, a, sizeof(bigint) + sizeof(bigint_unit) * a->len);
+    memcpy(b, a, sizeof(bigint) + sizeof(bigint_unit) * a->aml);
 
     return b;
 }
@@ -39,7 +42,7 @@ bigint *bigint_mm_optimize(bigint *a) {
 
     /* need to keep i above 0 to prevent underflow */
     for (i = a->len; i > 0; i--) {
-        if (bigint_libutil_value(a)[i-1] == 0) continue;
+        if (bigint_lu_v(a)[i-1] == 0) continue;
         break;
     }
 
@@ -53,17 +56,20 @@ bigint *bigint_mm_resize(bigint *a, bigint_len_unit n) {
     /* ensure there is a change in memory size */
     if (a->len == n) return a;
 
-    /* realloc call */
-    a = bigint_mm_realloc(a, sizeof(bigint) + sizeof(bigint_unit) * n);
+    /* check if a realloc is needed */
+    if (a->aml < n) {
+        /* realloc needed, call it (but with a higher value) */
+        n = (n > 1000)?(1.5*n):(2*n);
+        a = bigint_mm_realloc(a, sizeof(bigint) + sizeof(bigint_unit) * n);
+        /* ensure no memory errors */
+        if (!a) bigint_mm_err();
 
-    /* ensure no memory errors */
-    if (!a) bigint_mm_err();
+        /* initialize all the new blocks */
+        memset(bigint_lu_v(a) + a->aml, 0, sizeof(bigint_unit) * (n - a->aml));
 
-    /* since bigint array is in LSB, we don't need to shuffle memory! :D */
-
-    /* initialize all the new blocks */
-    if (a->len < n)
-        memset(bigint_libutil_value(a)+a->len,0,(n-a->len)*sizeof(bigint_unit));
+        /* update aml */
+        a->aml = n;
+    }
 
     /* new length */
     a->len = n;

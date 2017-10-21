@@ -15,14 +15,14 @@ bigint *bigint_lshift(bigint *a, bigint_len_unit n) {
 
         /* now we can just do a memmove */
         memmove(
-            (uint8_t *)bigint_libutil_value(a) + bc, /* destination */
-            bigint_libutil_value(a), /* source */
+            (uint8_t *)bigint_lu_v(a) + bc, /* destination */
+            bigint_lu_v(a), /* source */
             orig_len*sizeof(bigint_unit) /* number of bytes to move */
         );
 
         /* zero the lower bytes of memory */
         memset(
-            bigint_libutil_value(a), /* dest */
+            bigint_lu_v(a), /* dest */
             0, /* value = 0 */
             bc /* number of bytes */
         );
@@ -63,7 +63,7 @@ bigint *bigint_lshift(bigint *a, bigint_len_unit n) {
         "mov QWORD PTR [%1], r15\n\t"
         : 
         /* it is vital that n be in *c since we need register cl */
-        : "c"(n), "r"(bigint_libutil_value(a)), "r"(a->len)
+        : "c"(n), "r"(bigint_lu_v(a)), "r"(a->len)
         : "r13", "r14", "r15", "cc"
     );
 
@@ -78,15 +78,15 @@ bigint *bigint_rshift(bigint *a, bigint_len_unit n) {
 
         /* now we can just do a memmove */
         memmove(
-            bigint_libutil_value(a), /* destination */
-            (uint8_t *)bigint_libutil_value(a) + bc, /* source */
+            bigint_lu_v(a), /* destination */
+            (uint8_t *)bigint_lu_v(a) + bc, /* source */
             a->len*sizeof(bigint_unit) - bc /* number of bytes to move */
         );
 
         /* zero the higher bytes of memory */
         memset(
             /* dest */
-            (uint8_t *)bigint_libutil_value(a) + a->len*sizeof(bigint_unit)-bc,
+            (uint8_t *)bigint_lu_v(a) + a->len*sizeof(bigint_unit)-bc,
             0, /* value = 0 */
             bc /* number of bytes */
         );
@@ -126,7 +126,7 @@ bigint *bigint_rshift(bigint *a, bigint_len_unit n) {
         "mov QWORD PTR [%1 + r13*8], r15\n\t"
         : 
         /* it is vital that n be in *c since we need register cl */
-        : "c"(n), "r"(bigint_libutil_value(a)), "r"(a->len)
+        : "c"(n), "r"(bigint_lu_v(a)), "r"(a->len)
         : "r12", "r13", "r14", "r15", "cc"
     );
 
