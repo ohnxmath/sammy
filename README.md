@@ -8,11 +8,11 @@ except for x86_64. Future support for arm64 may be considered once the library
 has reached a sufficient level of completion :)
 
 ## What's done and what's planned
- - [*] Addition
- - [*] Subtraction (underflows are caught and return 0)
- - [*] Comparison
- - [*] Bitshifts
- - [*] Serialization to hex
+ - [x] Addition
+ - [x] Subtraction (underflows are caught and return 0)
+ - [x] Comparison
+ - [x] Bitshifts
+ - [x] Serialization to hex
  - [ ] Creation from string
  - [ ] Multiplication
  - [ ] Division
